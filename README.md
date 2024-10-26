@@ -222,8 +222,8 @@ graph TD
 
 ## Support and Contact
 
-- GitHub Issues: [Open Issue](https://github.com/yourusername/SR04Advanced/issues)
-- Email: [your.email@example.com]
+- GitHub Issues: https://www.linkedin.com/in/khairul7/
+- Email: khairul.robotics@gmail.com
 
 ## License
 
