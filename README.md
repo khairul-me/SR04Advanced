@@ -1,83 +1,124 @@
 # SR04Advanced Library
 
+<div align="center">
+<h3>Advanced Ultrasonic Sensor Library with Smart Filtering</h3>
+<p>Created by: Md Khairul Islam</p>
+<p>Hobart and William Smith Colleges</p>
+<p>Double major in Robotics and Computer Science</p>
+</div>
+
+## Quick Navigation
+- [Overview](#overview)
+- [Hardware Setup](#hardware-setup)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage Examples](#usage-examples)
+- [API Reference](#api-reference)
+- [Advanced Topics](#advanced-topics)
+- [Troubleshooting](#troubleshooting)
+
 ## Overview
-Advanced Arduino library for the HC-SR04 ultrasonic sensor that provides sophisticated filtering, noise reduction, and diagnostic capabilities. This library significantly improves measurement accuracy and reliability compared to basic HC-SR04 implementations.
 
-Created by: Md Khairul Islam
-Institution: Hobart and William Smith Colleges
-Major: Double major in Robotics and Computer Science
+SR04Advanced is a sophisticated Arduino library that enhances HC-SR04 ultrasonic sensor measurements through advanced filtering, noise reduction, and intelligent processing techniques.
 
-## Key Features
+### Hardware Connection Diagram
+
+```mermaid
+graph LR
+    A[Arduino] -- 5V --- B[HC-SR04]
+    A -- GND --- B
+    A -- Pin 9/TRIG --- B
+    A -- Pin 10/ECHO --- B
+    
+    style A fill:#4CAF50,stroke:#fff,stroke-width:2px
+    style B fill:#2196F3,stroke:#fff,stroke-width:2px
+```
+
+### Library Architecture
+
+```mermaid
+graph TD
+    A[Core Library] --> B[Filtering Layer]
+    A --> C[Measurement Modes]
+    A --> D[Analysis & Output]
+    
+    B --> B1[Low-Pass Filter]
+    B --> B2[Median Filter]
+    B --> B3[Kalman Filter]
+    B --> B4[Smart Filter]
+    
+    C --> C1[Normal Mode]
+    C --> C2[Precise Mode]
+    C --> C3[Fast Mode]
+    C --> C4[Adaptive Mode]
+    
+    D --> D1[JSON Output]
+    D --> D2[Visualization]
+    D --> D3[Diagnostics]
+    D --> D4[Statistics]
+    
+    style A fill:#FF5722,stroke:#fff,stroke-width:2px
+    style B fill:#2196F3,stroke:#fff,stroke-width:2px
+    style C fill:#4CAF50,stroke:#fff,stroke-width:2px
+    style D fill:#9C27B0,stroke:#fff,stroke-width:2px
+```
+
+### Signal Processing Flow
+
+```mermaid
+graph LR
+    A[Raw Signal] --> B[Filtering]
+    B --> C[Processing]
+    C --> D[Validation]
+    D --> E[Final Output]
+    
+    style A fill:#FF5722,stroke:#fff,stroke-width:2px
+    style B fill:#FF9800,stroke:#fff,stroke-width:2px
+    style C fill:#FFC107,stroke:#fff,stroke-width:2px
+    style D fill:#8BC34A,stroke:#fff,stroke-width:2px
+    style E fill:#4CAF50,stroke:#fff,stroke-width:2px
+```
+
+## Features
 
 ### Advanced Filtering
-- **Multiple Filter Types:**
-  - Low-pass filter for smooth measurements
-  - Median filter for spike removal
-  - Kalman filter for precise tracking
-  - Smart adaptive filtering that combines multiple methods
-  - Option to use raw unfiltered data
+| Filter Type | Best For | Performance Impact |
+|-------------|----------|-------------------|
+| Low-Pass | Smooth, continuous measurements | Low |
+| Median | Spike removal | Medium |
+| Kalman | Precise tracking | High |
+| Smart | Adaptive filtering | Medium-High |
 
 ### Measurement Modes
-- **Normal Mode:** Balanced performance for general use
-- **Precise Mode:** Higher accuracy through multiple readings
-- **Fast Mode:** Rapid measurements for quick updates
-- **Adaptive Mode:** Automatically adjusts based on noise levels
-
-### Smart Features
-- Temperature compensation for accurate measurements
-- Automatic calibration capability
-- Signal quality assessment
-- Noise level detection and measurement
-- Confidence level calculation
-- Statistical analysis of measurements
-
-### Diagnostics & Debugging
-- Real-time data visualization
-- JSON output support
-- Multiple debug levels
-- Comprehensive error checking
-- Statistical reporting
-
-## Hardware Requirements
-
-### Components Needed
-- Arduino board (Uno, Nano, Mega, etc.)
-- HC-SR04 Ultrasonic Sensor
-- Jumper wires
-- Optional: Temperature sensor for enhanced accuracy
-
-### Connections
-```
-HC-SR04     Arduino
-VCC    -->  5V
-GND    -->  GND
-TRIG   -->  Digital Pin 9 (configurable)
-ECHO   -->  Digital Pin 10 (configurable)
+```mermaid
+graph TD
+    A[Measurement Modes] --> B[Normal]
+    A --> C[Precise]
+    A --> D[Fast]
+    A --> E[Adaptive]
+    
+    B --> B1[Balanced Performance]
+    C --> C1[Multiple Readings]
+    D --> D1[Quick Updates]
+    E --> E1[Noise-Based Adjustment]
 ```
 
 ## Installation
 
 ### Method 1: Arduino Library Manager
-1. Open Arduino IDE
-2. Go to Sketch > Include Library > Manage Libraries
-3. Search for "SR04Advanced"
-4. Click Install
-
-### Method 2: Manual Installation
-1. Download the ZIP file from this repository
-2. In Arduino IDE: Sketch > Include Library > Add .ZIP Library
-3. Select the downloaded ZIP file
-
-### Method 3: PlatformIO
-Add to your `platformio.ini`:
-```ini
-lib_deps =
-    sr04advanced
+```mermaid
+graph TD
+    A[Arduino IDE] --> B[Manage Libraries]
+    B --> C[Search 'SR04Advanced']
+    C --> D[Install]
 ```
 
-## Quick Start Guide
+### Method 2: Manual Installation
+1. Download ZIP
+2. Arduino IDE: Sketch > Include Library > Add .ZIP Library
 
-### Basic Usage
+## Basic Usage
+
 ```cpp
 #include <SR04Advanced.h>
 
@@ -88,7 +129,7 @@ SR04Advanced sonar(TRIGGER_PIN, ECHO_PIN);
 
 void setup() {
     Serial.begin(9600);
-    sonar.begin();  // Initializes with auto-calibration
+    sonar.begin();  // Auto-calibration enabled
 }
 
 void loop() {
@@ -100,203 +141,93 @@ void loop() {
 }
 ```
 
-### Advanced Usage
-```cpp
-#include <SR04Advanced.h>
+## Filter Performance Visualization
 
-SR04Advanced sonar(9, 10);
+Here's how different filters affect the sensor readings:
 
-void setup() {
-    Serial.begin(9600);
+```mermaid
+graph TD
+    subgraph "Raw Signal"
+        A1[Noisy Data]
+    end
     
-    // Advanced configuration
-    sonar.setDebugLevel(DEBUG_ADVANCED);
-    sonar.setMeasurementMode(SR04Advanced::MODE_PRECISE);
-    sonar.setFilterParams(0.1, 5);  // Alpha, window size
-    sonar.setTemperature(25.0);     // Ambient temperature in Celsius
+    subgraph "Low-Pass Filter"
+        B1[Smoothed Data]
+    end
     
-    // Initialize and calibrate
-    sonar.begin(true);  // true = perform auto-calibration
+    subgraph "Median Filter"
+        C1[Spike Removed]
+    end
     
-    // Enable data visualization
-    sonar.enablePlotter(true);
-}
-
-void loop() {
-    float distance = sonar.getSmartDistance();
-    uint8_t quality = sonar.getSignalQuality();
-    uint8_t confidence = sonar.getConfidence();
+    subgraph "Kalman Filter"
+        D1[Tracked Data]
+    end
     
-    // Print detailed information
-    Serial.print("Distance: ");
-    Serial.print(distance);
-    Serial.print(" cm | Quality: ");
-    Serial.print(quality);
-    Serial.print("% | Confidence: ");
-    Serial.print(confidence);
-    Serial.println("%");
+    A1 --> B1
+    A1 --> C1
+    A1 --> D1
+```
+
+## Advanced Features
+
+### Temperature Compensation
+```cpp
+// Update temperature for accurate measurements
+sonar.setTemperature(25.0);  // 25°C
+```
+
+### Signal Quality Monitoring
+```mermaid
+graph LR
+    A[Signal] --> B{Quality Check}
+    B --> C[High Quality]
+    B --> D[Low Quality]
+    C --> E[Use Reading]
+    D --> F[Apply Extra Filtering]
+```
+
+## Performance Metrics
+
+### Filter Comparison
+| Filter Type | CPU Usage | Memory | Accuracy | Latency |
+|-------------|-----------|---------|-----------|----------|
+| None | ⭐ | ⭐ | ⭐ | ⭐⭐⭐ |
+| Low-Pass | ⭐⭐ | ⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
+| Median | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| Kalman | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| Smart | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+
+## Troubleshooting
+
+### Common Issues Flowchart
+```mermaid
+graph TD
+    A[Issue Detected] --> B{Check Type}
+    B -->|Inconsistent Readings| C[Check Power Supply]
+    B -->|High Noise| D[Check Environment]
+    B -->|Slow Response| E[Check Mode Settings]
     
-    delay(100);
-}
+    C --> F[Verify Wiring]
+    D --> G[Reduce Interference]
+    E --> H[Adjust Parameters]
 ```
-
-## Example Sketches
-
-### 1. BasicDistance
-Simple distance measurement with basic filtering.
-```cpp
-Examples/BasicDistance/BasicDistance.ino
-```
-
-### 2. AdvancedMeasurement
-Demonstrates different measurement modes and their uses.
-```cpp
-Examples/AdvancedMeasurement/AdvancedMeasurement.ino
-```
-
-### 3. TemperatureCompensation
-Shows how temperature affects measurements and compensation.
-```cpp
-Examples/TemperatureCompensation/TemperatureCompensation.ino
-```
-
-### 4. JsonOutput
-Provides sensor data in JSON format for external processing.
-```cpp
-Examples/JsonOutput/JsonOutput.ino
-```
-
-### 5. NoiseAnalysis
-Tools for analyzing sensor noise and filter performance.
-```cpp
-Examples/NoiseAnalysis/NoiseAnalysis.ino
-```
-
-### 6. DataVisualizer
-Real-time data visualization using Arduino's Serial Plotter.
-```cpp
-Examples/DataVisualizer/DataVisualizer.ino
-```
-
-## API Reference
-
-### Core Methods
-```cpp
-void begin(bool autoCalibrate = true)
-float getDistance()
-float getRawDistance()
-float getSmartDistance()
-```
-
-### Configuration Methods
-```cpp
-void setDebugLevel(uint8_t level)
-void setFilterMode(uint8_t mode)
-void setMeasurementMode(uint8_t mode)
-void setFilterParams(float alpha, int window_size)
-void setThresholds(float min_dist, float max_dist)
-void setTemperature(float temp_c)
-```
-
-### Diagnostic Methods
-```cpp
-void calibrate(uint16_t samples = 20)
-uint8_t getSignalQuality()
-uint8_t getConfidence()
-float getNoise()
-bool isMeasurementValid()
-```
-
-### Statistical Methods
-```cpp
-float getAverageDistance()
-float getMinDistance()
-float getMaxDistance()
-float getStandardDeviation()
-```
-
-## Troubleshooting Guide
-
-### Common Issues
-
-1. **Inconsistent Readings**
-   - Check power supply stability
-   - Ensure proper wiring
-   - Try different measurement modes
-   - Enable debugging for more information
-
-2. **High Noise Levels**
-   - Verify sensor mounting stability
-   - Check for interference sources
-   - Use MODE_PRECISE for better accuracy
-   - Adjust filter parameters
-
-3. **Slow Response**
-   - Switch to MODE_FAST
-   - Reduce filter window size
-   - Check for code delays
-   - Optimize loop timing
-
-4. **Temperature Effects**
-   - Update temperature regularly
-   - Use temperature compensation
-   - Consider ambient conditions
-
-### Debug Levels
-```cpp
-DEBUG_NONE      // No debug output
-DEBUG_BASIC     // Basic status messages
-DEBUG_ADVANCED  // Detailed information
-DEBUG_VERBOSE   // All available information
-```
-
-## Performance Optimization
-
-### Best Practices
-1. Choose appropriate measurement mode for your application
-2. Use temperature compensation when accuracy is critical
-3. Adjust filter parameters based on your needs
-4. Monitor signal quality and confidence levels
-5. Use appropriate delay between measurements
-
-### Filter Selection Guide
-- **Low-pass Filter:** Smooth, continuous measurements
-- **Median Filter:** Remove occasional spikes
-- **Kalman Filter:** Precise tracking with noise
-- **Smart Filter:** Best for general use
 
 ## Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes
+4. Push to branch
+5. Open Pull Request
 
-## Version History
+## Support and Contact
 
-- 1.0.0 (2024-10-26)
-  - Initial release
-  - Basic filtering capabilities
-  - Temperature compensation
-  - Diagnostic features
+- GitHub Issues: [Open Issue](https://github.com/yourusername/SR04Advanced/issues)
+- Email: [your.email@example.com]
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support and Contact
-
-For support, feature requests, or contributions:
-1. Open an issue on GitHub
-2. Contact: khairul.robotics@gmail.com
-3. Visit: https://www.linkedin.com/in/khairul7/
-
-## Acknowledgments
-
-- Faculty and peers at Hobart and William Smith Colleges
-- Arduino community members
-- Contributors and testers
-
 ---
-Copyright © 2024 Md Khairul Islam. All rights reserved.
+Made with 💡 by Md Khairul Islam
