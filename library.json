@@ -1,0 +1,19 @@
+{
+    "name": "SR04Advanced",
+    "version": "1.0.0",
+    "description": "Advanced HC-SR04 ultrasonic sensor library with smart filtering and diagnostics",
+    "keywords": "sensor, ultrasonic, SR04, HC-SR04, distance, filter, noise-reduction",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/khairul-me/SR04Advanced.git"
+    },
+    "authors": {
+      "name": "Md Khairul Islam",
+      "email": "khairul.robotics@gmail.com",
+      "url": "https://www.linkedin.com/in/khairul7/",
+      "maintainer": true
+    },
+    "license": "MIT",
+    "frameworks": "arduino",
+    "platforms": "*"
+  }
